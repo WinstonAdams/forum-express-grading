@@ -127,9 +127,10 @@ const restaurantController = {
           favoritedCount: restaurant.FavoritedUsers.length,
           isFavorited: req.user && req.user.FavoritedRestaurants.some(fr => fr.id === restaurant.id)
           // 同上：isFavorited: req.user && restaurant.FavoritedUsers.some(fu => fu.id === req.user.id)
-        }))
+        })) //! 可以在 findAll 中使用 order 、 limit 取代
           .sort((a, b) => b.favoritedCount - a.favoritedCount)
           .slice(0, 10)
+          .filter(r => r.favoritedCount > 0) // 至少要有一個使用者收藏
 
         res.render('top-restaurants', { restaurants: result })
       })
