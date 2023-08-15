@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs')
 
 const { User, Restaurant, Comment, Favorite, Like, Followship } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
+const helpers = require('../helpers/auth-helpers')
 
 const userController = {
   // 進入註冊頁面
@@ -54,9 +55,10 @@ const userController = {
       .then(user => {
         if (!user) throw new Error("User didn't exist!")
 
+        const loginUser = helpers.getUser(req)
         res.render('users/profile', {
           user: user.toJSON(),
-          loginUser: req.user
+          loginUser
         })
       })
       .catch(err => next(err))
