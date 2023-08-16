@@ -29,8 +29,8 @@ const restaurantController = {
         const data = restaurants.rows.map(r => ({
           ...r,
           description: r.description.substring(0, 50),
-          isFavorited: req.user && favoritedRestaurantsId.includes(r.id),
-          isLiked: req.user && likedRestaurantsId.includes(r.id)
+          isFavorited: favoritedRestaurantsId.includes(r.id),
+          isLiked: likedRestaurantsId.includes(r.id)
         }))
 
         return res.json({
