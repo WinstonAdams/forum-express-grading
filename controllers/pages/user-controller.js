@@ -77,7 +77,8 @@ const userController = {
   putUser: (req, res, next) => {
     const { name } = req.body
     if (!name) throw new Error('User name is required!')
-    if (req.params.id !== req.user.id) throw new Error('無法更改他人的資料')
+    const loginUser = helpers.getUser(req)
+    if (req.params.id !== loginUser.id) throw new Error('無法更改他人的資料')
 
     const file = req.file
 
