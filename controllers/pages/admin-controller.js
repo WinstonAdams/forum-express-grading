@@ -132,13 +132,11 @@ const adminController = {
 
   // 刪除餐廳
   deleteRestaurant: (req, res, next) => {
-    return Restaurant.findByPk(req.params.id)
-      .then(restaurant => {
-        if (!restaurant) throw new Error("Restaurant didn't exist!")
-        return restaurant.destroy()
-      })
-      .then(() => res.redirect('/admin/restaurants'))
-      .catch(err => next(err))
+    adminServices.deleteRestaurant(req, (err, data) => {
+      if (err) return next(err)
+      req.session.deletedData = data // 考量資訊安全性，將刪除的資料存在 session 中
+      return res.redirect('/admin/restaurants')
+    })
   }
 }
 

@@ -10,5 +10,21 @@ module.exports = {
 
     res.redirect('back') //! 重新導向錯誤發生的前一頁(依靠的是 Request Header 裡的 Referer 參數)
     next(err) // - 可以把 Error 物件傳給下一個 error handler
+  },
+
+  // API 的錯誤處理
+  apiErrorHandler (err, req, res, next) {
+    if (err instanceof Error) {
+      res.status(err.status || 500).json({
+        status: 'error',
+        message: `${err.name}: ${err.message}`
+      })
+    } else {
+      res.status(500).json({
+        status: 'error',
+        message: `${err}`
+      })
+    }
+    next(err)
   }
 }
