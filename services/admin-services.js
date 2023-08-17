@@ -1,4 +1,5 @@
 const { Restaurant, Category } = require('../models')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const adminServices = {
   // 進入管理者首頁(餐廳列表)
@@ -9,6 +10,27 @@ const adminServices = {
       include: [Category] // 使用 include 取得關聯資料
     })
       .then(restaurants => callback(null, { restaurants }))
+      .catch(err => callback(err))
+  },
+
+  // 新增餐廳功能
+  postRestaurant: (req, callback) => {
+    const { name, tel, address, openingHours, description, categoryId } = req.body
+    if (!name) throw new Error('Restaurant name is required!')
+
+    const { file } = req // 等同 const file = req.file
+
+    return imgurFileHandler(file)
+      .then(filePath => Restaurant.create({
+        name,
+        tel,
+        address,
+        openingHours,
+        description,
+        image: filePath || null,
+        categoryId
+      }))
+      .then(newRestaurant => callback(null, { restaurant: newRestaurant }))
       .catch(err => callback(err))
   },
 

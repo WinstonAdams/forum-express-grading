@@ -25,7 +25,9 @@ app.engine('hbs', handlebars({
 }))
 app.set('view engine', 'hbs')
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true })) // 承接並解析 urlencoded 格式的請求
+app.use(express.json()) // 承接並解析 json 格式的請求
+
 app.use(methodOverride('_method'))
 app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }))
 app.use(passport.initialize())
